@@ -1,0 +1,37 @@
+<configuration>
+
+    <!-- 全局替换参数 -->
+    <globalArgs>
+        <demo>1</demo>
+        <!--        <comment>1</comment>-->
+        <logDir>../logs</logDir>
+    </globalArgs>
+
+    <!-- 日志类 -->
+    <loggerClassName>com.neko233.log233.api.logger.LoggerApiByCoroutine</loggerClassName>
+
+    <!-- root logger | 影响全部 -->
+    <loggerHandlerRoot level="INFO">
+        <appender name="console"/>
+        <appender name="rollingFileAppender"/>
+    </loggerHandlerRoot>
+
+    <loggerHandler name="demo" level="INFO">
+        <appender name="console"/>
+        <!--        <appender name="rollingFileAppender"/>-->
+    </loggerHandler>
+
+    <appender name="console" className="com.neko233.log233.api.appender.imp.AppenderApiByConsole">
+    </appender>
+
+
+    <!-- Rolling File Appender -->
+    <appender name="rollingFileAppender" className="com.neko233.log233.appender.impl.file.AppenderApiByRollingFile">
+        <logFileName>${logDir}/app.log</logFileName>
+
+        <!--        <maxHistoryFileCount>30</maxHistoryFileCount>-->
+        <!--        <maxFileSize>100MB</maxFileSize>-->
+        <!--        <useHistoryFileZip>false</useHistoryFileZip>-->
+    </appender>
+
+</configuration>
