@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class Log233 {
+annotation class Log233Annotation {
 
     companion object {
         /**

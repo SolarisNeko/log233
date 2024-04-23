@@ -2,20 +2,15 @@ package com.neko233.log233.api
 
 import com.neko233.log233.api.constant.Log233Constant
 import java.io.File
+import kotlin.reflect.KClass
 
-/**
- * 日志工厂
- *
- * @author SolarisNeko
- * Date on 2024-01-01
- * */
 object Log233 {
 
     /**
      * 设置 logger 配置
      */
     @JvmStatic
-    fun <T : Any> setLoggerConfig(
+    fun setLoggerConfig(
         resourceFilePath: String = "log233.xml",
         fromResourcesFlag: Boolean = true
     ) {
@@ -31,5 +26,36 @@ object Log233 {
         System.setProperty(Log233Constant.CONFIG_FILE_ENV_KEY, absolutePath)
     }
 
+    /**
+     * 介绍
+     */
+    @JvmStatic
+    fun readMe(): String {
+        return """
+            API introduce :
+            LoggerApiFactory = SLF4J LoggerFactory
+            LoggerApi = SLF4J Logger
+            AppenderApi = logback <appender>
+            loggerHandlerRootHandler = logback XML <root>
+            LoggerHandler = logback XML <logger>
+        """.trimIndent()
+    }
+
+    @JvmStatic
+    fun <T : Any> getLogger(clazz: KClass<T>): LoggerApi {
+        return LoggerApiFactory.getLogger(clazz.java.name)
+    }
+
+
+    @JvmStatic
+    fun <T> getLogger(clazz: Class<T>): LoggerApi {
+        return LoggerApiFactory.getLogger(clazz.name)
+    }
+
+
+    @JvmStatic
+    fun getLogger(loggerName: String): LoggerApi {
+        return LoggerApiFactory.getLogger(loggerName)
+    }
 
 }
