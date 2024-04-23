@@ -27,14 +27,14 @@ The license is Apache-2.0.
 <dependency>
     <groupId>com.neko233</groupId>
     <artifactId>log233</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```kotlin
-implementation("com.neko233:log233:0.0.1")
+implementation("com.neko233:log233:0.0.2")
 ```
 
 ## Motivation & Pain Points
@@ -58,14 +58,14 @@ Utilizing Kotlin's coroutine features, log233 offers a more efficient logging me
 <dependency>
     <groupId>com.neko233</groupId>
     <artifactId>log233-all</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 </dependency>
 ```
 
 #### Gradle
 
 ```kotlin
-implementation("com.neko233:log233-all:0.0.1")
+implementation("com.neko233:log233-all:0.0.2")
 ```
 
 ## Configuration
@@ -111,6 +111,13 @@ In the resource file, global parameters, log classes, handlers, and appenders ca
 ```
 
 ## Code Example
+
+### diy your config
+```kotlin
+// config file =  resource/log233-dev.xml 
+Log233.setLoggerConfig("log233-dev.xml", true)
+
+```
 
 ### LoggerApi
 

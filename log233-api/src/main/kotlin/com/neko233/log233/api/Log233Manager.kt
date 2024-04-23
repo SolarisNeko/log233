@@ -71,8 +71,11 @@ class Log233Manager private constructor() {
         val configFilePath =
             System.getProperty(Log233Constant.CONFIG_FILE_ENV_KEY, Log233Constant.CONFIG_FILE_DEFAULT_PATH)
 
+        val defaultFlag = configFilePath == Log233Constant.CONFIG_FILE_DEFAULT_PATH
+        val isInClassPath = configFilePath.startsWith("classpath:")
+
         // 读取 resources/
-        val xmlUri: URI? = if (configFilePath.startsWith("classpath:")) {
+        val xmlUri: URI? = if (isInClassPath) {
             // 从类路径中加载配置文件
             val resourcePath = configFilePath.substring("classpath:".length)
             Log233Manager::class.java.classLoader.getResource(resourcePath)?.toURI()
@@ -85,14 +88,34 @@ class Log233Manager private constructor() {
             throw IllegalArgumentException("Configuration file not found: $configFilePath")
         }
 
-        val xmlPath = xmlUri.let {
-            Paths.get(it)
+
+        println("[Log233] current use config path = ${xmlUri.path}")
+
+// 这里需要做特殊处理, 可能是在 jar 中的文件
+        val xmlPath = if (defaultFlag) {
+            // 从类路径中加载的资源
+            val resourcePath = configFilePath.substring("classpath:".length)
+            val inputStream = Log233Manager::class.java.classLoader.getResourceAsStream(resourcePath)
+                ?: throw IllegalArgumentException("Configuration file not found in classpath: $resourcePath")
+
+            // 创建临时文件并写入资源内容, 快照配置
+            val tempFile = File.createTempFile("temp", ".xml")
+            tempFile.deleteOnExit()
+            tempFile.outputStream().use { outputStream ->
+                inputStream.copyTo(outputStream)
+            }
+            tempFile.absolutePath
+        } else {
+            // 从文件系统中加载的资源
+            Paths.get(xmlUri)
                 .toAbsolutePath()
                 .toString()
         }
 
 
-        val xml = XmlUtils.replaceXmlPlaceholders(xmlPath, "globalArgs")
+        // 获取全局替换参数后的 XML 内容
+        val xml = XmlUtils.getXmlContentWithReplaceGlobalArgs(xmlPath, "globalArgs")
+
         val xmlObject = XML.parseToObject(xml)
 
         var loggerHandlerRoot: XmlObject? = null

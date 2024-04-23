@@ -43,9 +43,10 @@ object XmlUtils {
 
 
     /**
+     * get XML 内容 + 全局替换参数
      * 读取全局参数并替换文件中所有的占位符
      */
-    fun replaceXmlPlaceholders(
+    fun getXmlContentWithReplaceGlobalArgs(
         xmlFilePath: String,
         globalArgRootNodeName: String = "globalArgs"
     ): String {

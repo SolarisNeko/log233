@@ -22,14 +22,14 @@ License 为 Apache-2.0。
 <dependency>
     <groupId>com.neko233</groupId>
     <artifactId>log233</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```kotlin
-implementation("com.neko233:log233:0.0.1")
+implementation("com.neko233:log233:0.0.2")
 ```
 
 ## 初衷 & 痛点
@@ -53,14 +53,14 @@ log233 旨在解决传统日志系统在高并发环境下的性能瓶颈和可�
 <dependency>
     <groupId>com.neko233</groupId>
     <artifactId>log233-all</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 </dependency>
 ```
 
 #### Gradle
 
 ```kotlin
-implementation("com.neko233:log233-all:0.0.1")
+implementation("com.neko233:log233-all:0.0.2")
 ```
 
 ## 配置
@@ -109,6 +109,12 @@ implementation("com.neko233:log233-all:0.0.1")
 ```
 
 ## 代码示例
+### 自定义配置文件
+```kotlin
+// 设置为 resource/log233-dev.xml 为配置文件
+Log233.setLoggerConfig("log233-dev.xml", true)
+
+```
 
 ### LoggerApi
 
