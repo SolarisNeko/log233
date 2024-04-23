@@ -1,25 +1,25 @@
-
 # log233
 
-English Doc [English Doc](./README.md)
 
-中文文档 [中文文档](./README-cn.md)
+English Doc [English Doc](./README-en)
 
-## Requirements
+中文文档 [中文文档](./README)
 
-- JDK 8 or higher
+## 要求
 
-## Introduction
+- JDK 8+
 
-log233 is a high-performance logging framework that incorporates the following features:
+## 介绍
 
-1. Similar to the SLF4J logging facade standard, it provides flexible log management.
-2. Comparable to Logback in functionality, optimizing asynchronous logging and file rolling.
-3. Supports coroutines, enhancing concurrent log writing performance.
+log233 是一个高性能的日志框架，结合了以下特点：
 
-The license is Apache-2.0.
+1. 类似 SLF4J 日志门面标准，提供灵活的日志管理。
+2. 类似 Logback 功能，优化日志的异步处理与文件滚动。
+3. 提供协程支持，增强并发日志写入性能。
 
-## Download
+License 为 Apache-2.0。
+
+## 下载
 
 ### Maven
 
@@ -37,24 +37,24 @@ The license is Apache-2.0.
 implementation("com.neko233:log233:0.0.3")
 ```
 
-## Motivation & Pain Points
+## 初衷 & 痛点
 
-log233 is designed to address the performance bottlenecks and scalability limitations of traditional logging systems in high-concurrency environments.
+log233 旨在解决传统日志系统在高并发环境下的性能瓶颈和可扩展性限制。
 
-By emulating SLF4J and Logback, it reduces the learning curve for users.
+通过类似 SLF4J 和 Logback 的相似, 降低使用者的学习成本.
 
-Besides the traditional SLF4J logging, log233 provides a "unified business log" API for business-level logging.
+并提供了除了传统 SLF4J 日志以外, 【统一业务日志】API, 应用于业务级
 
-Utilizing Kotlin's coroutine features, log233 offers a more efficient logging mechanism, reducing the impact of log writing on application performance.
+并利用 Kotlin 的协程特性， log233 能够提供更高效的日志处理机制，减少日志写入对应用性能的影响。
 
-## Usage Instructions
+## 使用说明
 
-### Dependencies
+### 依赖
 
 #### Maven
 
 ```xml
-<!-- Defaults to using Druid as the data source -->
+<!-- 默认使用 druid 作为数据源 -->
 <dependency>
     <groupId>com.neko233</groupId>
     <artifactId>log233-all</artifactId>
@@ -68,25 +68,26 @@ Utilizing Kotlin's coroutine features, log233 offers a more efficient logging me
 implementation("com.neko233:log233-all:0.0.3")
 ```
 
-## Configuration
+## 配置
 
-### Resources/xml
+### 资源/xml
 
-In the resource file, global parameters, log classes, handlers, and appenders can be configured. Here is a configuration example:
+在资源文件中，可以配置全局参数、日志类、处理器和附加器。以下是一个配置示例：
 
 ```xml
 <configuration>
 
-    <!-- Global replacement parameters -->
+    <!-- 全局替换参数 -->
     <globalArgs>
         <demo>1</demo>
+        <!-- <comment>1</comment> -->
         <logDir>../logs</logDir>
     </globalArgs>
 
-    <!-- Logger class -->
+    <!-- 日志类 -->
     <loggerClassName>com.neko233.log233.api.logger.LoggerApiByCoroutine</loggerClassName>
 
-    <!-- Root logger configuration, affecting all logs -->
+    <!-- root logger | 影响全部 -->
     <loggerHandlerRoot level="INFO">
         <appender name="console"/>
         <appender name="rollingFileAppender"/>
@@ -94,6 +95,7 @@ In the resource file, global parameters, log classes, handlers, and appenders ca
 
     <loggerHandler name="demo" level="INFO">
         <appender name="console"/>
+        <!-- <appender name="rollingFileAppender"/> -->
     </loggerHandler>
 
     <appender name="console" className="com.neko233.log233.api.appender.imp.AppenderApiByConsole">
@@ -102,26 +104,26 @@ In the resource file, global parameters, log classes, handlers, and appenders ca
     <!-- Rolling File Appender -->
     <appender name="rollingFileAppender" className="com.neko233.log233.appender.impl.file.AppenderApiByRollingFile">
         <logFileName>${logDir}/app-{dateTime}-{count}.log</logFileName>
-        <dateTimeFormat>yyyy-MM-dd</dateTimeFormat> 
-        <maxHistoryFileCount>30</maxHistoryFileCount> 
-        <maxFileSize>100MB</maxFileSize> 
+         <dateTimeFormat>yyyy-MM-dd</dateTimeFormat> 
+         <maxHistoryFileCount>30</maxHistoryFileCount> 
+         <maxFileSize>100MB</maxFileSize> 
+        <!-- <useHistoryFileZip>false</useHistoryFileZip> -->
     </appender>
 
 </configuration>
 ```
 
-## Code Example
-
-### diy your config
+## 代码示例
+### 自定义配置文件
 ```kotlin
-// config file =  resource/log233-dev.xml 
+// 设置为 resource/log233-dev.xml 为配置文件
 Log233.setLoggerConfig("log233-dev.xml", true)
 
 ```
 
 ### LoggerApi
 
-Here is an example code for logging with log233:
+使用 log233 进行日志记录的示例代码如下：
 
 ```kotlin
 import com.neko233.log233.api.Log233Manager
@@ -135,7 +137,7 @@ class Log233Test {
 
     @Test
     fun test() {
-        // Set the configuration file
+        // 设置配置文件
         System.setProperty(Log233Constant.CONFIG_FILE_ENV_KEY, "classpath:log233-default.xml");
 
         logger.debug("hello world. arg = {}", "1")
@@ -148,61 +150,53 @@ class Log233Test {
 }
 ```
 
-This code demonstrates how to initialize the log233 logger and perform logging at various levels.
+这段代码展示了如何初始化 log233 日志器并进行各级别的日志记录。
 
-The detailed documentation of log233 is now enhanced. For the Chinese version of this document, please refer to `./README-cn.md`.
+以上是对 log233 文档的完善。如果有特定的部分需要进一步细化或解释，请告知。
 
-This is intended for use in a `README.md` file on GitHub. If any specific parts need further elaboration or explanation, please let me know.
-
-
-# Extensions
-## Recommended Placeholder Format
-
-Using `${key}` is not recommended as it is already used by global log233 parameters. Instead, it is advised to use the following format:
-
+# 扩展
+## 推荐的占位符格式
+不推荐使用 ${key}, 因为全局 log233 参数已经占用了这个替换符
+推荐
 ```text
 <yourKey>/path/to/your-file-{dateTimeFormat}-{demo}
 ```
 
-This format avoids conflicts with the internal substitution mechanism of log233 and ensures that custom parameters are distinct and easily identifiable.
-
-## Customizing Your Appender
-
-To extend log233 with a custom appender, you can inherit from `AbstractAppenderApi` and implement its methods. Here's an example in Kotlin:
+## 自定义你的 Appender
 
 ```kotlin
+
 import com.neko233.log233.api.appender.AbstractAppenderApi
 import com.neko233.log233.api.structs.MessageObj
+import java.io.PrintWriter
+import java.io.StringWriter
 import java.text.SimpleDateFormat
 
 class AppenderApiByDiy : AbstractAppenderApi() {
 
     override fun initYourConfig(kvMap: Map<String, String>) {
-        // Initialize your appender with custom parameters
+        // todo init your appender 通过自定义参数
     }
 
     override fun appendMessage(messageObj: MessageObj) {
-        // Format the date and time of the log entry
         val dateTimeStr = dateFormatter.format(messageObj.createTimeMs)
 
-        // Extract log message details
         val message = messageObj.message
         val threadName = messageObj.threadName
         val level = messageObj.level.name
         val callPositionStr = messageObj.callPositionStr
         val throwable: Throwable? = messageObj.throwable
 
-        // Implement your logging logic here
-        // For example, log to a file, database, or external service
+        // todo your log 
+
     }
+
 
     override fun logBusiness(
         uniqueName: String,
         obj: Any
     ) {
-        // Implement business-specific logging if needed
+        // nothing
     }
 }
 ```
-
-In this example, `initYourConfig` is where you can initialize the appender with custom settings, and `appendMessage` is where you define how the log message is processed and stored. The `logBusiness` method can be used for business-specific logging, if needed. This framework allows for flexible log handling, catering to the specific needs of your application.
